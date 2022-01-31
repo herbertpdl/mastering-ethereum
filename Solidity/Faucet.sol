@@ -2,24 +2,30 @@
 
 pragma solidity ^0.8.11;
 
-contract Faucet {
-  address payable owner;
+contract Owned {
+	address payable owner;
 
-  modifier onlyOwner {
-    require(msg.sender == owner);
-    _;
-  }
-
-  // Initialize Faucet contract: set owner
+	// Initialize Faucet contract: set owner
   constructor() {
     owner = payable(msg.sender);
   }
 
-  // Contract destructor
+	// Access control modifier
+  modifier onlyOwner {
+    require(msg.sender == owner);
+    _;
+  }
+}
+
+contract Mortal is Owned {
+	// Contract destructor
   function destroy() public onlyOwner {
     selfdestruct(owner);
   }
 
+}
+
+contract Faucet is Mortal{
   // Accept any incoming amount
   receive() external payable{}
 
