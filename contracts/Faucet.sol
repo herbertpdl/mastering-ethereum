@@ -29,6 +29,12 @@ contract Faucet is Mortal{
   event Withdraw(address indexed to, uint amount);
   event Deposit(address indexed from, uint amount);
 
+  uint value;
+
+  constructor() payable {
+    value = msg.value;
+  }
+
   // Accept any incoming amount
   receive() external payable{
     emit Deposit(msg.sender, msg.value);
