@@ -7,11 +7,13 @@ import './Faucet.sol';
 contract Token is Mortal {
   Faucet _faucet;
 
-  constructor() payable {
-    _faucet = (new Faucet){value: 0.5 ether}();
+  constructor(address payable _f) payable {
+    _faucet = Faucet(_f);
+
   }
 
   function destroy() override public onlyOwner {
     _faucet.destroy();
+    _faucet.withdraw(0.1 ether);
   }
 }
